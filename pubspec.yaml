@@ -1,0 +1,76 @@
+name: TrocWeb_BackOff
+description: TrocWeb_BackOff
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.17.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.2
+
+  http: ^0.13.4
+  uuid: ^3.0.2
+
+  carousel_slider: ^4.0.0
+
+  flutter_spinkit: ^5.1.0
+
+  flutter_cache_manager: ^3.1.2
+  cached_network_image: ^3.1.0
+  consumer: ^2.0.2
+  file_picker: ^4.2.3
+
+
+  flutter_dropdown: ^1.0.0+hotfix.1
+  shared_preferences: ^2.0.13
+
+  intl:
+  timezone: ^0.8.0
+  flutter_time_picker_spinner: ^2.0.0
+
+  firebase_core: ^1.15.0
+  firebase_messaging: ^11.2.14
+
+  dashboard: ^0.0.2+4
+  flutter_colorpicker: ^1.0.3
+  url_launcher: ^6.1.0
+  syncfusion_flutter_datagrid: ^20.2.36
+  syncfusion_flutter_pdf: ^20.2.36
+  syncfusion_flutter_xlsio: ^20.2.36-beta
+  syncfusion_flutter_calendar: ^20.2.36
+  auto_size_text: ^3.0.0
+  syncfusion_flutter_charts: ^20.2.36
+
+  platform: ^3.1.0
+  file: ^6.1.4
+
+  toggle_switch: ^2.0.1
+
+  dropdown_button2: ^1.8.2
+  datepicker_dropdown: ^0.0.7+5
+
+
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+
+flutter:
+  uses-material-design: true
+  assets:
+  - assets/
+  - assets/images/
+  - assets/fonts/
+  - pubspec.yaml
+
+
