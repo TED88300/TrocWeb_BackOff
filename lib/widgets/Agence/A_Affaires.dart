@@ -2499,7 +2499,7 @@ class A_InventaireState extends State<A_Inventaire> {
           List<InventaireDet>? data = snapshot.data;
 
           return CupertinoScrollbar(
-              isAlwaysShown: true, child: ListViewPieces(data));
+               child: ListViewPieces(data));
         } else if (snapshot.hasError) {
           return Text("Liste vide");
         } else {
@@ -2737,7 +2737,7 @@ class A_InventaireState extends State<A_Inventaire> {
           List<InventaireDet>? data = snapshot.data;
 
           return Scrollbar(
-            isAlwaysShown: true,
+
             child: ListViewObjets(data),
             controller: _firstController,
           );
