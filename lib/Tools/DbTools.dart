@@ -59,7 +59,7 @@ class DbTools {
   static String Hexa_ville = "GRENOBLE";
 
   static var notif = Notif();
-  static String gVersion = "v2.40.0 b240";
+  static String gVersion = "v2.42.0 b242";
   static bool gTED = false;
   static bool gIsRememberLogin = true;
   static String Url = "185.98.136.238";
@@ -1466,6 +1466,24 @@ class DbTools {
   static Future<bool> getInventairesEtabID_NewCT(int EtabID) async {
     String aSQL =
         "select * FROM Inventaires WHERE (etabid = ${EtabID} OR etabidOrigine = ${EtabID}) AND Origine != 'Agence' AND  AffAccept < 99 order by Nom";
+
+    print("getInventairesEtabID_NewCT aSQL ${aSQL}");
+
+
+    ListInventaire = await getInventaire_API_Post("select", aSQL);
+    if (ListInventaire == null) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  static Future<bool> getInventairesEtabID_AllCT(int EtabID) async {
+    String aSQL =
+        "select * FROM Inventaires WHERE (etabid = ${EtabID} OR etabidOrigine = ${EtabID}) AND Status < 8 order by id";
+
+    print("getInventairesEtabID_NewCT aSQL ${aSQL}");
+
 
     ListInventaire = await getInventaire_API_Post("select", aSQL);
     if (ListInventaire == null) {

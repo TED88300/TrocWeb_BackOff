@@ -17,6 +17,7 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:flutter_dropdown/flutter_dropdown.dart';
+import 'package:toggle_switch/toggle_switch.dart';
 
 class A_Liste_Affaires_PT_50_100 extends StatefulWidget {
   @override
@@ -45,6 +46,9 @@ class A_Liste_Affaires_PT_50_100State
 
   bool onCellTap = false;
   bool isChecked = false;
+
+  int AffDem = 0;
+
 
   List<Etablissement> ListEtablissementNewCts = [];
 
@@ -160,9 +164,9 @@ class A_Liste_Affaires_PT_50_100State
     ListEtablissementNewCts.clear();
 
     DbTools.ListEtablissementAll.forEach((element) async {
-      if (element.IsNewCT == 1 || element.id == 14) {
+//      if (element.IsNewCT == 1 || element.id == 14) {
         ListEtablissementNewCts.add(element);
-      }
+  //    }
     });
     print(
         "initState ListEtablissementNewCts.length ${ListEtablissementNewCts.length}");
@@ -233,7 +237,7 @@ class A_Liste_Affaires_PT_50_100State
         padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
         color: gColors.secondary,
         child: Text(
-          "Affaires Nouveaux contrats",
+          "Liste d'affaires",
           style: TextStyle(
             color: gColors.white,
           ),
@@ -244,31 +248,34 @@ class A_Liste_Affaires_PT_50_100State
         height: 300,
         child: Column(
           children: [
+
+            ToggleSwitch(
+                minWidth: 90.0,
+                activeBgColors: [
+                  [Colors.green],
+                  [Colors.green],
+                ],
+                customWidths: [
+                  180,
+                  180,
+                ],
+                initialLabelIndex: AffDem,
+                customTextStyles : [TextStyle(color: Colors.white,),],
+                totalSwitches: 2,
+                labels: [
+                  'Nouveaux contrats',
+                  'Toutes les affaires',
+                ],
+                onToggle: (index) {
+                  print('switched to A : $index');
+                  AffDem = index!;
+                  print('switched to B : $index');
+                }),
+
+
             DD_Etabs(),
-/*
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 7),
-                  child: Text("Toutes les agences",
-                      style: TextStyle(
-                        fontSize: 16,
-                      )),
-                ),
-                Checkbox(
-                  value: isChecked,
-                  onChanged: (value) {
-                    setState(() {
-                      isChecked = value!;
-                    });
-                    Reload();
-                  },
-                ),
-              ],
-            ),
-*/
+
+
             DD_Period(),
           ],
         ),
@@ -290,9 +297,9 @@ class A_Liste_Affaires_PT_50_100State
         new ElevatedButton(
           onPressed: () async{
             if (DbTools.SelEtabID == 14)
-              await Excel.CrtExcelPat("TK_Debarras_Liste_Affaire_50_100__${SelMonth}__${Selyear}.xlsx", SelMonth, Selyear, -1);
+              await Excel.CrtExcelPat("TK_Debarras_Liste_Affaire_50_100__${SelMonth}__${Selyear}.xlsx", SelMonth, Selyear, -1, AffDem);
             else
-              await Excel.CrtExcelPat("TK_Debarras_Liste_Affaire_50_100__${SelMonth}__${Selyear}.xlsx", SelMonth, Selyear, DbTools.SelEtabID);
+              await Excel.CrtExcelPat("TK_Debarras_Liste_Affaire_50_100__${SelMonth}__${Selyear}.xlsx", SelMonth, Selyear, DbTools.SelEtabID, AffDem);
 
 
             Navigator.of(context).pop();
@@ -310,9 +317,9 @@ class A_Liste_Affaires_PT_50_100State
         new ElevatedButton(
           onPressed: () async{
             if (DbTools.SelEtabID == 14)
-              await Excel.CrtExcelPat("TK_Debarras_Liste_Affaire_50_100__${SelMonth}__${Selyear}.xlsx", SelMonth, -1, -1);
+              await Excel.CrtExcelPat("TK_Debarras_Liste_Affaire_50_100__${SelMonth}__${Selyear}.xlsx", SelMonth, -1, -1, AffDem);
             else
-              await Excel.CrtExcelPat("TK_Debarras_Liste_Affaire_50_100__${SelMonth}__${Selyear}.xlsx", SelMonth, -1, DbTools.SelEtabID);
+              await Excel.CrtExcelPat("TK_Debarras_Liste_Affaire_50_100__${SelMonth}__${Selyear}.xlsx", SelMonth, -1, DbTools.SelEtabID, AffDem);
             Navigator.of(context).pop();
           },
           style: ElevatedButton.styleFrom(

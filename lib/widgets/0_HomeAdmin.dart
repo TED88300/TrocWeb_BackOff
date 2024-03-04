@@ -26,6 +26,8 @@ class HomeAdmin extends StatelessWidget {
           ],
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
+            useMaterial3: false,
+
             fontFamily: 'Quicksand',
             appBarTheme: AppBarTheme(
               color: gColors.primary,
