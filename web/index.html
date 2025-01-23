@@ -1,23 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
-
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
-
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-  <base href="/">
-  -->
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
   <meta name="description" content="A new Flutter project.">
 
-  <!-- iOS meta tags & icons -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="TK Débarras - Back-Office">
@@ -25,6 +13,13 @@
 
   <title>TK Débarras - Back-Office</title>
   <link rel="manifest" href="manifest.json">
+
+    <script>
+        const serviceWorkerVersion = {{flutter_service_worker_version}};
+    </script>
+
+    <script src="/main.dart.js" defer></script>
+
 </head>
 <body>
 
@@ -35,24 +30,11 @@
       <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-firestore.js"></script>
 
 
-      <script>
 
-      const firebaseConfig = {
-          apiKey: "AIzaSyDIsf1iB5pSeBRQ-9zuqYBZIY6DDs3cL9g",
-          authDomain: "domihome-89e68.firebaseapp.com",
-          databaseURL: "https://domihome-89e68.firebaseio.com",
-          projectId: "domihome-89e68",
-          storageBucket: "domihome-89e68.appspot.com",
-          messagingSenderId: "302769413228",
-          appId: "1:302769413228:web:bd2ff613f64e2a5a"
-          };
-            // Initialize Firebase
-            firebase.initializeApp(firebaseConfig);
-          </script>
       
 <script>
-  var serviceWorkerVersion = null;
-  var scriptLoaded = false;
+
+    var scriptLoaded = false;
   function loadMainDartJs() {
     if (scriptLoaded) {
       return;

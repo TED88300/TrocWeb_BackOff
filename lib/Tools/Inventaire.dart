@@ -228,30 +228,6 @@ class Inventaire {
 
     );
 
-    if (wInventaire.nom == null) wInventaire.nom = "";
-    if (wInventaire.adresse1 == null) wInventaire.adresse1 = "";
-    if (wInventaire.adresse2 == null) wInventaire.adresse2 = "";
-    if (wInventaire.cp == null) wInventaire.cp = "";
-    if (wInventaire.ville == null) wInventaire.ville = "";
-    if (wInventaire.tel == null) wInventaire.tel = "";
-    if (wInventaire.mail == null) wInventaire.mail = "";
-    if (wInventaire.CarteIdentite == null) wInventaire.CarteIdentite = "";
-    if (wInventaire.DateCrt == null) wInventaire.DateCrt = "";
-
-    if (wInventaire.fnom == null) wInventaire.fnom = "";
-    if (wInventaire.fadresse1 == null) wInventaire.fadresse1 = "";
-    if (wInventaire.fadresse2 == null) wInventaire.fadresse2 = "";
-    if (wInventaire.fcp == null) wInventaire.fcp = "";
-    if (wInventaire.fville == null) wInventaire.fville = "";
-    if (wInventaire.ftel == null) wInventaire.ftel = "";
-    if (wInventaire.fmail == null) wInventaire.fmail = "";
-
-    if (wInventaire.DateInv == null) wInventaire.DateInv = "";
-    if (wInventaire.DateDeb == null) wInventaire.DateDeb = "";
-
-    if (wInventaire.Presc == null) wInventaire.Presc = "";
-    if (wInventaire.Date_Push == null) wInventaire.Date_Push = "";
-
 
     return wInventaire;
   }

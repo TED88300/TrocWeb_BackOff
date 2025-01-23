@@ -1,6 +1,5 @@
 import 'dart:html';
 import 'package:TrocWeb_BackOff/Tools/DbTools.dart';
-import 'package:TrocWeb_BackOff/Tools/Devis_Fact.dart';
 import 'package:TrocWeb_BackOff/widgets/2-login.dart';
 import 'package:TrocWeb_BackOff/widgets/Agence/A_Calendrier.dart';
 import 'package:TrocWeb_BackOff/widgets/Agence/A_Liste_Affaires.dart';
@@ -8,10 +7,8 @@ import 'package:TrocWeb_BackOff/widgets/Agence/A_Liste_Affaires_50_100.dart';
 import 'package:TrocWeb_BackOff/widgets/Agence/A_Liste_Affaires_PT.dart';
 import 'package:TrocWeb_BackOff/widgets/Agence/A_Liste_Affaires_PT_50_100.dart';
 import 'package:TrocWeb_BackOff/widgets/Agence/A_Liste_Affaires_PT_ALL.dart';
-import 'package:TrocWeb_BackOff/widgets/DASHBOARD_A.dart';
 
 import 'package:TrocWeb_BackOff/widgets/NOTIFICATIONS.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:TrocWeb_BackOff/Tools/gColors.dart';
 import 'package:flutter/material.dart';
 import 'package:TrocWeb_BackOff/Tools/shared_Cookies.dart';
@@ -89,7 +86,10 @@ class DashboardWidgetState extends State<DashboardWidget> {
               color: gColors.primary,
               child: ListView(
                 children: <Widget>[
-                  DrawerHeader(
+                SizedBox(
+                height : 200.0,
+                child  :
+                DrawerHeader(
                     padding:
                         EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
                     child: Column(
@@ -149,7 +149,7 @@ class DashboardWidgetState extends State<DashboardWidget> {
                     decoration: BoxDecoration(
                       color: gColors.primary,
                     ),
-                  ),
+                  ),),
                   Container(
                     height: 1,
                     color: gColors.TextColor1,
@@ -229,7 +229,7 @@ class DashboardWidgetState extends State<DashboardWidget> {
                           ? Container()
                           : ListTile(
                               leading: const Icon(
-                                Icons.person_outline,
+                                Icons.add_business_rounded,
                                 color: gColors.TextColor1,
                               ),
                               title: Text('Aff. 50€/100€',
@@ -249,7 +249,7 @@ class DashboardWidgetState extends State<DashboardWidget> {
                             )
                       : ListTile(
                           leading: const Icon(
-                            Icons.person_outline,
+                            Icons.add_business_rounded,
                             color: gColors.TextColor1,
                           ),
                           title: Text('AFF. 50€/100€',
@@ -269,7 +269,7 @@ class DashboardWidgetState extends State<DashboardWidget> {
                   Container(height: 10),
                   ListTile(
                     leading: const Icon(
-                      Icons.person_outline,
+                      Icons.calendar_month_sharp,
                       color: gColors.TextColor1,
                     ),
                     title: Text('CALENDRIER',
@@ -289,7 +289,28 @@ class DashboardWidgetState extends State<DashboardWidget> {
                     },
                   ),
                   Container(height: 10),
-                  (DbTools.gEtablissement.id > 3)
+                  ListTile(
+                    leading: const Icon(
+                      Icons.list_alt,
+                      color: gColors.TextColor1,
+                    ),
+                    title: Text('FACTURES',
+                        style: TextStyle(
+                          color: (currentPage == 6)
+                              ? gColors.TextColor3
+                              : gColors.TextColor2,
+                          fontSize: 14,
+                        )),
+                    onTap: () async {
+                      await DbTools.getInventaires_Calendar(DbTools.gEtablissement.id);
+
+                      setState(() {
+                        Title = "Trokeur débarras : Calendrier";
+                        currentPage = 6;
+                      });
+                    },
+                  ),
+                  Container(height: 10),                  (DbTools.gEtablissement.id > 3)
                       ? Container()
                       : ListTile(
                           leading: const Icon(
@@ -298,7 +319,7 @@ class DashboardWidgetState extends State<DashboardWidget> {
                           ),
                           title: Text('Adresses Journaux',
                               style: TextStyle(
-                                color: (currentPage == 6)
+                                color: (currentPage == 7)
                                     ? gColors.TextColor3
                                     : gColors.TextColor2,
                                 fontSize: 14,
@@ -306,7 +327,7 @@ class DashboardWidgetState extends State<DashboardWidget> {
                           onTap: () async {
                             setState(() {
                               Title = "Trokeur débarras : Adresses Journaux";
-                              currentPage = 6;
+                              currentPage = 7;
                             });
                           },
                         ),

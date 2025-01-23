@@ -2,9 +2,7 @@ import 'package:TrocWeb_BackOff/Tools/DbTools.dart';
 import 'package:TrocWeb_BackOff/Tools/gColors.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
-import 'package:url_launcher/link.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Necro extends StatefulWidget {

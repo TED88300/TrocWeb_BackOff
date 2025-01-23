@@ -1,14 +1,11 @@
 import 'dart:async';
 
 import 'package:TrocWeb_BackOff/Tools/DbTools.dart';
-import 'package:TrocWeb_BackOff/Tools/Excel.dart';
 import 'package:TrocWeb_BackOff/Tools/shared_Cookies.dart';
 import 'package:TrocWeb_BackOff/widgets/2-login.dart';
 import 'package:TrocWeb_BackOff/widgets/3-dashboard.dart';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 
 
@@ -39,6 +36,7 @@ class SplashScreenState extends State<SplashScreen>
      //Excel.CrtExcelPat("TK_Debarras_${DbTools.gInventaire.nom}.xlsx");
 
 
+
     if (IsRememberLogin)
       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => DashboardWidget()));
     else
@@ -50,6 +48,7 @@ class SplashScreenState extends State<SplashScreen>
     print("SplashScreen initLib");
     await DbTools.getEtablissementsAll();
     await DbTools.getActions();
+
 
 
     CookieManager cm = CookieManager.getInstance();
@@ -114,6 +113,11 @@ class SplashScreenState extends State<SplashScreen>
                 width: animation.value * 500,
                 height: animation.value * 500,
               ),
+              Text("${DbTools.gVersion}",
+                  style: TextStyle(
+                    fontSize: 10,
+                  )),
+
             ],
           ),
         ],

@@ -37,7 +37,6 @@ class _LoginState extends State<Login> {
   int wSelAffAdmin = 0;
   bool AffAdmin = false;
 
-
   final List<String> itemsEtab = [];
   final List<int> itemsEtabId = [];
   String? selectedValueEtab = "";
@@ -46,14 +45,10 @@ class _LoginState extends State<Login> {
   //****************************************
 
   void initLib() async {
-
-
     await DbTools.getUtilisateurs();
-
 
     await DbTools.getEtablissements();
     selectedValueEtab = "";
-
 
     DbTools.ListEtablissement.forEach((element) {
       if (selectedValueEtab == "") selectedValueEtab = element.Libelle;
@@ -61,7 +56,6 @@ class _LoginState extends State<Login> {
 
       itemsEtab.add("${element.Libelle}");
       itemsEtabId.add(element.id);
-
     });
   }
 
@@ -100,7 +94,7 @@ class _LoginState extends State<Login> {
   }
 
   Widget buildTedLogin() {
-    AffAdmin = (wSelAffAdmin == 14) ;
+    AffAdmin = (wSelAffAdmin == 14);
     print("buildTedLogin ${AffAdmin} ${wSelAffAdmin}");
     return AffAdmin
         ? Row(
@@ -117,11 +111,7 @@ class _LoginState extends State<Login> {
                   backgroundColor: gColors.primary,
                   padding: const EdgeInsets.all(12.0),
                 ),
-                child: Text('SA',
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold)),
+                child: Text('SA', style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold)),
               ),
               Container(
                 width: 20,
@@ -134,11 +124,7 @@ class _LoginState extends State<Login> {
                   backgroundColor: gColors.primary,
                   padding: const EdgeInsets.all(12.0),
                 ),
-                child: Text('SVP',
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold)),
+                child: Text('SVP', style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold)),
               ),
               Container(
                 width: 20,
@@ -151,11 +137,7 @@ class _LoginState extends State<Login> {
                   backgroundColor: gColors.primary,
                   padding: const EdgeInsets.all(12.0),
                 ),
-                child: Text('US 35',
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold)),
+                child: Text('US 35', style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold)),
               ),
               Container(
                 width: 20,
@@ -168,11 +150,7 @@ class _LoginState extends State<Login> {
                   backgroundColor: gColors.primary,
                   padding: const EdgeInsets.all(12.0),
                 ),
-                child: Text('TKS+',
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold)),
+                child: Text('TKS+', style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold)),
               ),
               Container(
                 width: 20,
@@ -185,73 +163,57 @@ class _LoginState extends State<Login> {
   Widget buildTedLogin2() {
     return AffAdmin
         ? DropdownButtonHideUnderline(
-      child: DropdownButton2(
-        items: itemsEtab
-            .map((item) =>
-            DropdownMenuItem<String>(
-              value: item,
-              child: Text(
-                "  ${item}",
+            child: DropdownButton2(
+              items: itemsEtab
+                  .map((item) => DropdownMenuItem<String>(
+                        value: item,
+                        child: Text(
+                          "  ${item}",
+                        ),
+                      ))
+                  .toList(),
+              value: selectedValueEtab,
+              onChanged: (value) async {
+                selectedValueEtab = value as String;
+                for (int i = 0; i < itemsEtab.length; i++) {
+                  if (itemsEtab[i] == selectedValueEtab) {
+                    print("i ${i}");
+                    print("id ${itemsEtabId[i]} ${DbTools.ListUtilisateur.length}");
 
-              ),
-            ))
-            .toList(),
-        value: selectedValueEtab,
-        onChanged: (value) async{
+                    for (int j = 0; j < DbTools.ListUtilisateur.length; j++) {
+                      print("Motdepasse ${DbTools.ListUtilisateur[j].User} ${DbTools.ListUtilisateur[j].Motdepasse}      ${DbTools.ListUtilisateur[j].id} ${selectedValueEtab}");
 
-            selectedValueEtab = value as String;
-            for (int i = 0; i < itemsEtab.length; i++)
-            {
-              if (itemsEtab[i] ==selectedValueEtab)
-                {
+                      if (DbTools.ListUtilisateur[j].etabid == itemsEtabId[i]) {
+                        print("Motdepasse $j");
 
-
-                  print ("i ${i}");
-                  print ("id ${itemsEtabId[i]} ${DbTools.ListUtilisateur.length}");
-
-                for (int j = 0; j < DbTools.ListUtilisateur.length; j++) {
-                  print ("Motdepasse ${DbTools.ListUtilisateur[j].User} ${DbTools.ListUtilisateur[j].Motdepasse}      ${DbTools.ListUtilisateur[j].id} ${selectedValueEtab}");
-
-                  if (DbTools.ListUtilisateur[j].etabid == itemsEtabId[i])
-                    {
-
-                      print ("Motdepasse $j");
-
-
-                      await login(DbTools.ListUtilisateur[j].User, DbTools.ListUtilisateur[j].Motdepasse);
-
+                        await login(DbTools.ListUtilisateur[j].User, DbTools.ListUtilisateur[j].Motdepasse);
+                      }
                     }
-
-
-
+                  }
                 }
 
+                ;
+              },
+
+              buttonStyleData: const ButtonStyleData(
+                height: 30,
+                width: 300
+              ),
+              menuItemStyleData: const MenuItemStyleData(
+                height: 32,
+              ),
+              dropdownStyleData: DropdownStyleData(
+                maxHeight: 200,
+              ),
 
 
-                }
-
-
-
-            }
-
-
-
-
-          ;
-        },
-        buttonHeight: 28,
-        buttonWidth: 300,
-        dropdownMaxHeight: 200,
-        itemHeight: 40,
-      ),
-    ) : Container();
+            ),
+          )
+        : Container();
   }
 
-
-    Future<void> login(
-      String emailController_text, String passwordController_text) async {
-    if (await DbTools.getUtilisateur(
-        emailController_text, passwordController_text)) {
+  Future<void> login(String emailController_text, String passwordController_text) async {
+    if (await DbTools.getUtilisateur(emailController_text, passwordController_text)) {
       print("User OK");
       CookieManager cm = CookieManager.getInstance();
       if (isChecked) {
@@ -263,8 +225,7 @@ class _LoginState extends State<Login> {
         cm.addToCookie("passwordLogin", "");
         cm.addToCookie("IsRememberLogin", "");
       }
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => DashboardWidget()));
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => DashboardWidget()));
     }
   }
 
@@ -296,11 +257,11 @@ class _LoginState extends State<Login> {
           wSelAffAdmin = 0;
           await login(emailController.text, passwordController.text);
         },
-        style: ElevatedButton.styleFrom( backgroundColor: gColors.primary, padding: const EdgeInsets.all(12.0),),           child: Text('Log In',
-            style: TextStyle(
-                fontSize: 16,
-                color: Colors.white,
-                fontWeight: FontWeight.bold)),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: gColors.primary,
+          padding: const EdgeInsets.all(12.0),
+        ),
+        child: Text('Log In', style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold)),
       ),
     );
 
@@ -336,7 +297,6 @@ class _LoginState extends State<Login> {
                       Expanded(
                           child: GestureDetector(
                         onTap: () async {
-
                           wSelAffAdmin++;
                           setState(() {});
                         },
@@ -344,22 +304,20 @@ class _LoginState extends State<Login> {
                           'assets/images/Logo.png',
                         ),
                       )),
-                  GestureDetector(
-                    onTap: () async {
+                      GestureDetector(
+                          onTap: () async {
+                            wSelAffAdmin += 13;
 
-                      wSelAffAdmin += 13;
-
-
-                      setState(() {});
-                    },
-                    child:Center(
-                          child: Text(
-                        "BACK OFFICE",
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ))),
+                            setState(() {});
+                          },
+                          child: Center(
+                              child: Text(
+                            "BACK OFFICE",
+                            style: TextStyle(
+                              fontSize: 28,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ))),
                       SizedBox(height: 8.0),
                       email,
                       SizedBox(height: 8.0),

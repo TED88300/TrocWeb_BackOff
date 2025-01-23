@@ -1,18 +1,28 @@
+
 import 'package:TrocWeb_BackOff/Tools/DbTools.dart';
 import 'package:TrocWeb_BackOff/widgets/0_HomeAdmin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:TrocWeb_BackOff/Tools/gColors.dart';
+import 'dart:html';
 
-void main() {
+
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   if (kDebugMode) print("main debug");
 
   DbTools.gTED = kDebugMode;
 
+  DbTools.curUrl = window.location.href;
+
+  print("DbTools.curUrl ${DbTools.curUrl}");
+
+
   runApp(MaterialApp(
+
       theme: ThemeData(
         useMaterial3: false,
         cardTheme: CardTheme(
@@ -25,10 +35,14 @@ void main() {
         ),
 
       ),
-    localizationsDelegates: [GlobalMaterialLocalizations.delegate],
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,          ],
       supportedLocales: [
-        const Locale('fr'),
+        const Locale('fr', '')
       ],
+
       home: HomeAdmin()));
 
 //  runApp(HomeAdmin());

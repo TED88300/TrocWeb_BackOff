@@ -1,15 +1,12 @@
-import 'dart:math';
 
 import 'package:TrocWeb_BackOff/Tools/DbTools.dart';
 import 'package:TrocWeb_BackOff/Tools/Etablissement.dart';
 import 'package:TrocWeb_BackOff/Tools/Excel.dart';
 import 'package:TrocWeb_BackOff/Tools/Inventaire.dart';
-import 'package:TrocWeb_BackOff/Tools/DbTools.dart';
 import 'package:TrocWeb_BackOff/Tools/gColors.dart';
 import 'package:TrocWeb_BackOff/widgets/Agence/A_Affaires.dart';
 import 'package:datepicker_dropdown/datepicker_dropdown.dart';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
@@ -876,11 +873,6 @@ class InventaireDataSource extends DataGridSource {
 
     int? aLength = value1.length;
     int? bLength = value2.length;
-
-    if (aLength == null || bLength == null) {
-      print("null");
-      return 0;
-    }
 
     if (value1.compareTo(value2) > 0) {
       wret = 1;

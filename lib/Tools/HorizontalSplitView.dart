@@ -9,9 +9,7 @@ class HorizontalSplitView extends StatefulWidget {
 
   const HorizontalSplitView(
       { required this.top, required this.bottom, this.ratio = 0.5})
-      : assert(top != null),
-        assert(bottom != null),
-        assert(ratio >= 0),
+      : assert(ratio >= 0),
         assert(ratio <= 1);
 
   @override
@@ -40,7 +38,6 @@ class _HorizontalSplitViewState extends State<HorizontalSplitView> {
     return LayoutBuilder(builder: (context, BoxConstraints constraints) {
       assert(_ratio <= 1);
       assert(_ratio >= 0);
-      if (_maxHeight == null) _maxHeight = constraints.maxHeight - _dividerHeight;
       if (_maxHeight != constraints.maxHeight) {
         _maxHeight = constraints.maxHeight - _dividerHeight;
       }

@@ -30,51 +30,48 @@ class Upload {
       var uri = Uri.parse(wPath.toString());
 
       List? files = result.files;
-      if (files != null) {
+      print("adding files selected with file picker");
+      for (PlatformFile file in files) {
+        print("file " + file.name);
 
-        print("adding files selected with file picker");
-        for (PlatformFile file in files) {
-          print("file " + file.name);
+        String imagepath = "Photo_${DbTools.gInventaireDet.id}_" + aIndex.toString() + ".jpg";
+        print("imagepath " + imagepath);
 
-          String imagepath = "Photo_${DbTools.gInventaireDet.id}_" + aIndex.toString() + ".jpg";
-          print("imagepath " + imagepath);
-
-          var request = new http.MultipartRequest("POST", uri);
-          request.fields.addAll({
-            'tic12z': DbTools.SrvToken,
-            'zasq': 'uploadphotosize',
-            'imagepath': imagepath,
-          });
+        var request = new http.MultipartRequest("POST", uri);
+        request.fields.addAll({
+          'tic12z': DbTools.SrvToken,
+          'zasq': 'uploadphotosize',
+          'imagepath': imagepath,
+        });
 
 
 
-          var multipartFile = new http.MultipartFile('uploadfile',  file.readStream!, file.size, filename: file.name);
-          request.files.add(multipartFile);
-          var response = await request.send();
-          print(response.statusCode);
-          await response.stream.transform(utf8.decoder).listen((value) async {
+        var multipartFile = new http.MultipartFile('uploadfile',  file.readStream!, file.size, filename: file.name);
+        request.files.add(multipartFile);
+        var response = await request.send();
+        print(response.statusCode);
+        await response.stream.transform(utf8.decoder).listen((value) async {
 
 //            value {"success":1,"name":"Photo_62973_1.jpg","uploadfilename":"\/var\/www\/clients\/client0\/web2\/tmp\/phpmQfloJ","is_uploaded_file":"OK","size":32105,"mime":"image\/jpeg","mimetype":"jpg","mimecompress":"60","werror":"Move  OK = "}
 //            value {"success":1,"name":"Photo_62973_1.jpg","uploadfilename":"\/var\/www\/clients\/client0\/web2\/tmp\/phpygit7w","is_uploaded_file":"OK","size":32105,"mime":"image\/jpeg","mimetype":"jpg","mimecompress":"60","werror":"Move  OK = "}
 
-            print("value " + value);
-            print("Fin $aIndex");
-            if (Consumer == 99) return;
+          print("value " + value);
+          print("Fin $aIndex");
+          if (Consumer == 99) return;
 
-            await DbTools.addInventaireDetPhotos(aIndex++);
-
-
-            if (Consumer == 0) {
-              consumerA_Inventaire.setState((state) async {
-                state.picList.add(file.bytes!);
-              });
+          await DbTools.addInventaireDetPhotos(aIndex++);
 
 
-            }
-          });
-        }
+          if (Consumer == 0) {
+            consumerA_Inventaire.setState((state) async {
+              state.picList.add(file.bytes!);
+            });
+
+
+          }
+        });
       }
-    }
+        }
     if (Consumer == 0) {
       consumerB_Inventaire.setState((state) async {
         state.isVisibleObj = true;
@@ -693,10 +690,10 @@ class Upload {
   static double tPx_Vente = 0.0;
   static double tPx_Achat = 0.0;
 
-  static int tTps = 0;
-  static int tTpsC = 0;
-  static int tTpsD = 0;
-  static int tTpsE = 0;
+  static double tTps = 0;
+  static double tTpsC = 0;
+  static double tTpsD = 0;
+  static double tTpsE = 0;
 
   static double tM3 = 0.0;
   static double tM3C = 0.0;
@@ -706,15 +703,21 @@ class Upload {
   static void addProducts(InventaireDet element, PdfGrid grid) {
     NumberFormat numberFormat = NumberFormat.currency(locale: 'eu', symbol: '');
 
+
+//    print("element ${element.Desc()}");
+
     int col = 0;
     int colidx = 0;
 
-    tPx_Vente += double.parse(element.Px_Vente.toString());
-    tPx_Achat += double.parse(element.Px_Achat.toString());
-    tTps += int.parse(element.Temps.toString());
-    tTpsC += element.CDE == "C" ? int.parse(element.Temps.toString()) : 0;
-    tTpsD += element.CDE == "D" ? int.parse(element.Temps.toString()) : 0;
-    tTpsE += element.CDE == "E" ? int.parse(element.Temps.toString()) : 0;
+
+
+
+    tPx_Vente += double.parse(element.Px_Vente.toString().replaceAll(",", "."));
+    tPx_Achat += double.parse(element.Px_Achat.toString().replaceAll(",", "."));
+    tTps += double.parse(element.Temps.toString().replaceAll(",", "."));
+    tTpsC += element.CDE == "C" ? double.parse(element.Temps.toString().replaceAll(",", ".")) : 0;
+    tTpsD += element.CDE == "D" ? double.parse(element.Temps.toString().replaceAll(",", ".")) : 0;
+    tTpsE += element.CDE == "E" ? double.parse(element.Temps.toString().replaceAll(",", ".")) : 0;
 
     tM3 += double.parse(element.M3.toString());
     tM3C += element.CDE == "C" ? double.parse(element.M3.toString()) : 0;

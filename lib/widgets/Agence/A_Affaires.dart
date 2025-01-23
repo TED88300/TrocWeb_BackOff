@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:math';
-import 'dart:typed_data';
 
 import 'package:TrocWeb_BackOff/Tools/Etablissement.dart';
 import 'package:TrocWeb_BackOff/Tools/InventaireAction.dart';
@@ -44,32 +43,39 @@ class A_InventaireState extends State<A_Inventaire> {
 
   DateTime DateTime_Action = DateTime.parse("2009-01-01");
 
-  final tecNom = TextEditingController();
-  final tecPresc = TextEditingController();
-  final tecadresse1 = TextEditingController();
-  final tecadresse2 = TextEditingController();
-  final teccp = TextEditingController();
-  final tecville = TextEditingController();
-  final tectel = TextEditingController();
-  final tecmail = TextEditingController();
-  final tecCI = TextEditingController();
+  final tecNom          = TextEditingController();
+  final tecPresc          = TextEditingController();
+  final tecadresse1          = TextEditingController();
+  final tecadresse2          = TextEditingController();
+  final teccp          = TextEditingController();
+  final tecville          = TextEditingController();
+  final tectel          = TextEditingController();
+  final tecmail          = TextEditingController();
+  final tecCI          = TextEditingController();
+  final tecPiece          = TextEditingController();
+  final tecObjet          = TextEditingController();
+  final tecPx_Vente     = TextEditingController();
+  final tecPx_Achat     = TextEditingController();
+  final tecTemps      = TextEditingController();
+  final tecM3         = TextEditingController();
+  final tecTri          = TextEditingController();
+  final tecDem        = TextEditingController();
+  final tecMan        = TextEditingController();
+  final tecAutre         = TextEditingController();
+  final tecMt_Dem_HT    = TextEditingController();
+  final tecTxForce          = TextEditingController();
+  final tecfNom          = TextEditingController();
+  final tecfadresse1          = TextEditingController();
+  final tecfadresse2          = TextEditingController();
+  final tecfcp          = TextEditingController();
+  final tecfville          = TextEditingController();
+  final tecftel          = TextEditingController();
+  final tecfmail          = TextEditingController();
 
-  final tecPiece = TextEditingController();
-  final tecObjet = TextEditingController();
 
-  final tecPx_Vente = TextEditingController();
-  final tecPx_Achat = TextEditingController();
-  final tecTemps = TextEditingController();
-  final tecM3 = TextEditingController();
 
-  final tecTri = TextEditingController();
-  final tecDem = TextEditingController();
-  final tecMan = TextEditingController();
 
-  final tecAutre = TextEditingController();
 
-  final tecMt_Dem_HT = TextEditingController();
-  final tecTxForce = TextEditingController();
   double dTx = 0;
   double dTxForce = 0;
 
@@ -83,13 +89,6 @@ class A_InventaireState extends State<A_Inventaire> {
   double Mt_Client_HT = 0;
   double Mt_Client_TTC = 0;
 
-  final tecfNom = TextEditingController();
-  final tecfadresse1 = TextEditingController();
-  final tecfadresse2 = TextEditingController();
-  final tecfcp = TextEditingController();
-  final tecfville = TextEditingController();
-  final tecftel = TextEditingController();
-  final tecfmail = TextEditingController();
 
   bool FinCh_Opt_1 = false;
   bool FinCh_Opt_2 = false;
@@ -245,7 +244,7 @@ class A_InventaireState extends State<A_Inventaire> {
 
     isLoad = true;
 
-    setState(() => {_selectedIndex = 0});
+    setState(() {_selectedIndex = 0;});
   }
 
   void initLib() async {
@@ -283,6 +282,37 @@ class A_InventaireState extends State<A_Inventaire> {
   @override
   void dispose() {
     subscription.cancel(); //Not working
+
+    tecNom.dispose();
+    tecPresc.dispose();
+    tecadresse1.dispose();
+    tecadresse2.dispose();
+    teccp.dispose();
+    tecville.dispose();
+    tectel.dispose();
+    tecmail.dispose();
+    tecCI.dispose();
+    tecPiece.dispose();
+    tecObjet.dispose();
+    tecPx_Vente.dispose();
+    tecPx_Achat.dispose();
+    tecTemps.dispose();
+    tecM3.dispose();
+    tecTri.dispose();
+    tecDem.dispose();
+    tecMan.dispose();
+    tecAutre.dispose();
+    tecMt_Dem_HT.dispose();
+    tecTxForce.dispose();
+    tecfNom.dispose();
+    tecfadresse1.dispose();
+    tecfadresse2.dispose();
+    tecfcp.dispose();
+    tecfville.dispose();
+    tecftel.dispose();
+    tecfmail.dispose();
+
+
     super.dispose();
   }
 
@@ -1200,16 +1230,17 @@ class A_InventaireState extends State<A_Inventaire> {
                         },
                         child: Icon(Icons.add),
                         style: ButtonStyle(
-                          shape: MaterialStateProperty.all(CircleBorder()),
+                          shape: WidgetStateProperty.all(CircleBorder()),
                           padding:
-                              MaterialStateProperty.all(EdgeInsets.all(20)),
-                          backgroundColor: MaterialStateProperty.all(
+                              WidgetStateProperty.all(EdgeInsets.all(20)),
+                          backgroundColor: WidgetStateProperty.all(
                               Colors.green), // <-- Button color
                           overlayColor:
-                              MaterialStateProperty.resolveWith<Color?>(
+                              WidgetStateProperty.resolveWith<Color?>(
                                   (states) {
-                            if (states.contains(MaterialState.pressed))
-                              return gColors.primary; // <-- Splash color
+                            if (states.contains(WidgetState.pressed))
+                              return gColors.primary;
+                            return null; // <-- Splash color
                           }),
                         ),
                       ),
@@ -2531,7 +2562,7 @@ class A_InventaireState extends State<A_Inventaire> {
           InventaireDet inventaireDet = data?.elementAt(index);
 
           return Container(
-              color: _selectedIndex != null && _selectedIndex == index
+              color: _selectedIndex == index
                   ? gColors.primary
                   : (index.isOdd ? Colors.black12 : Colors.white),
               /**/
@@ -2783,7 +2814,7 @@ class A_InventaireState extends State<A_Inventaire> {
     _onSelectedObj(index);
     isVisiblePhoto = false;
     isVisiblePhoto0 = false;
-    isVisibleObj = _selectedIndexObj != null && _selectedIndexObj == index;
+    isVisibleObj = _selectedIndexObj == index;
 
     consumerB_Inventaire.setState((state) async {
       state.isVisibleObj = isVisiblePhoto;
@@ -2885,7 +2916,7 @@ class A_InventaireState extends State<A_Inventaire> {
           InventaireDet inventaireDet = data?.elementAt(index);
           bool isSelected = false;
           return Container(
-              color: _selectedIndex != null && _selectedIndexObj == index
+              color: _selectedIndexObj == index
                   ? gColors.primary
                   : (index.isOdd ? Colors.black12 : Colors.white),
               /**/
@@ -3731,17 +3762,18 @@ class A_InventaireState extends State<A_Inventaire> {
                               child: Icon(Icons.refresh),
                               style: ButtonStyle(
                                 shape:
-                                    MaterialStateProperty.all(CircleBorder()),
-                                padding: MaterialStateProperty.all(
+                                    WidgetStateProperty.all(CircleBorder()),
+                                padding: WidgetStateProperty.all(
                                     EdgeInsets.all(20)),
-                                backgroundColor: MaterialStateProperty.all(
+                                backgroundColor: WidgetStateProperty.all(
                                     Colors
                                         .deepPurpleAccent), // <-- Button color
                                 overlayColor:
-                                    MaterialStateProperty.resolveWith<Color?>(
+                                    WidgetStateProperty.resolveWith<Color?>(
                                         (states) {
-                                  if (states.contains(MaterialState.pressed))
-                                    return gColors.primary; // <-- Splash color
+                                  if (states.contains(WidgetState.pressed))
+                                    return gColors.primary;
+                                  return null; // <-- Splash color
                                 }),
                               ),
                             ),
@@ -3752,16 +3784,17 @@ class A_InventaireState extends State<A_Inventaire> {
                               child: Icon(Icons.add),
                               style: ButtonStyle(
                                 shape:
-                                    MaterialStateProperty.all(CircleBorder()),
-                                padding: MaterialStateProperty.all(
+                                    WidgetStateProperty.all(CircleBorder()),
+                                padding: WidgetStateProperty.all(
                                     EdgeInsets.all(20)),
-                                backgroundColor: MaterialStateProperty.all(
+                                backgroundColor: WidgetStateProperty.all(
                                     Colors.green), // <-- Button color
                                 overlayColor:
-                                    MaterialStateProperty.resolveWith<Color?>(
+                                    WidgetStateProperty.resolveWith<Color?>(
                                         (states) {
-                                  if (states.contains(MaterialState.pressed))
-                                    return gColors.primary; // <-- Splash color
+                                  if (states.contains(WidgetState.pressed))
+                                    return gColors.primary;
+                                  return null; // <-- Splash color
                                 }),
                               ),
                             ),
@@ -3831,19 +3864,20 @@ class A_InventaireState extends State<A_Inventaire> {
                                     },
                                     child: Icon(Icons.delete),
                                     style: ButtonStyle(
-                                      shape: MaterialStateProperty.all(
+                                      shape: WidgetStateProperty.all(
                                           CircleBorder()),
-                                      padding: MaterialStateProperty.all(
+                                      padding: WidgetStateProperty.all(
                                           EdgeInsets.all(20)),
                                       backgroundColor:
-                                          MaterialStateProperty.all(
+                                          WidgetStateProperty.all(
                                               Colors.red), // <-- Button color
-                                      overlayColor: MaterialStateProperty
+                                      overlayColor: WidgetStateProperty
                                           .resolveWith<Color?>((states) {
                                         if (states
-                                            .contains(MaterialState.pressed))
+                                            .contains(WidgetState.pressed))
                                           return gColors
-                                              .primary; // <-- Splash color
+                                              .primary;
+                                        return null; // <-- Splash color
                                       }),
                                     ),
                                   ),
@@ -4019,16 +4053,17 @@ class A_InventaireState extends State<A_Inventaire> {
                           },
                           child: Icon(Icons.refresh),
                           style: ButtonStyle(
-                            shape: MaterialStateProperty.all(CircleBorder()),
+                            shape: WidgetStateProperty.all(CircleBorder()),
                             padding:
-                                MaterialStateProperty.all(EdgeInsets.all(20)),
-                            backgroundColor: MaterialStateProperty.all(
+                                WidgetStateProperty.all(EdgeInsets.all(20)),
+                            backgroundColor: WidgetStateProperty.all(
                                 Colors.deepPurpleAccent), // <-- Button color
                             overlayColor:
-                                MaterialStateProperty.resolveWith<Color?>(
+                                WidgetStateProperty.resolveWith<Color?>(
                                     (states) {
-                              if (states.contains(MaterialState.pressed))
-                                return gColors.primary; // <-- Splash color
+                              if (states.contains(WidgetState.pressed))
+                                return gColors.primary;
+                              return null; // <-- Splash color
                             }),
                           ),
                         ),
@@ -4038,16 +4073,17 @@ class A_InventaireState extends State<A_Inventaire> {
                           },
                           child: Icon(Icons.add),
                           style: ButtonStyle(
-                            shape: MaterialStateProperty.all(CircleBorder()),
+                            shape: WidgetStateProperty.all(CircleBorder()),
                             padding:
-                                MaterialStateProperty.all(EdgeInsets.all(20)),
-                            backgroundColor: MaterialStateProperty.all(
+                                WidgetStateProperty.all(EdgeInsets.all(20)),
+                            backgroundColor: WidgetStateProperty.all(
                                 Colors.green), // <-- Button color
                             overlayColor:
-                                MaterialStateProperty.resolveWith<Color?>(
+                                WidgetStateProperty.resolveWith<Color?>(
                                     (states) {
-                              if (states.contains(MaterialState.pressed))
-                                return gColors.primary; // <-- Splash color
+                              if (states.contains(WidgetState.pressed))
+                                return gColors.primary;
+                              return null; // <-- Splash color
                             }),
                           ),
                         ),
@@ -4111,17 +4147,18 @@ class A_InventaireState extends State<A_Inventaire> {
                                 child: Icon(Icons.delete),
                                 style: ButtonStyle(
                                   shape:
-                                      MaterialStateProperty.all(CircleBorder()),
-                                  padding: MaterialStateProperty.all(
+                                      WidgetStateProperty.all(CircleBorder()),
+                                  padding: WidgetStateProperty.all(
                                       EdgeInsets.all(20)),
-                                  backgroundColor: MaterialStateProperty.all(
+                                  backgroundColor: WidgetStateProperty.all(
                                       Colors.red), // <-- Button color
                                   overlayColor:
-                                      MaterialStateProperty.resolveWith<Color?>(
+                                      WidgetStateProperty.resolveWith<Color?>(
                                           (states) {
-                                    if (states.contains(MaterialState.pressed))
+                                    if (states.contains(WidgetState.pressed))
                                       return gColors
-                                          .primary; // <-- Splash color
+                                          .primary;
+                                    return null; // <-- Splash color
                                   }),
                                 ),
                               ),
@@ -4931,6 +4968,7 @@ class ActionDialog extends StatefulWidget {
 class _ActionDialogState extends State<ActionDialog> {
   final tecRem = TextEditingController();
 
+
   String Avis = "";
 
   List<String> LnkAvis = [];
@@ -5023,6 +5061,13 @@ class _ActionDialogState extends State<ActionDialog> {
       setState(() {});
     }
   }
+
+  @override
+  void dispose() {
+    tecRem.dispose();
+    super.dispose();
+  }
+
 
   @override //A
   Widget build(BuildContext context) {
@@ -5236,6 +5281,13 @@ class _ActionDialogRoState extends State<ActionDialogRo> {
     print("ActionDialogRo DbTools.gInventaireAction.Date ${DbTools.gInventaireAction.Date}");
     print("ActionDialogRo DateTime_Action ${DateTime_Action}");
   }
+
+  @override
+  void dispose() {
+    tecRem.dispose();
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {

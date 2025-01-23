@@ -1,6 +1,4 @@
-import 'dart:convert';
 import 'dart:html' as htmlfile;
-import 'dart:typed_data';
 import 'platform_file_picker.dart';
 
 PlatformFilePicker createPickerObject() => WebFilePicker();
@@ -26,7 +24,7 @@ class WebFilePicker implements PlatformFilePicker{
 
       print("files!.length ${files!.length}");
 
-      if(files!.length == 1){
+      if(files.length == 1){
         final htmlfile.File file = files[0];
         final reader = htmlfile.FileReader();
         reader.onLoadEnd.listen((event) {

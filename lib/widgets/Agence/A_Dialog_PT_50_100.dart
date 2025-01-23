@@ -1,26 +1,21 @@
 import 'dart:convert';
 import 'dart:math';
-import 'dart:typed_data';
 
 import 'package:TrocWeb_BackOff/Tools/DbTools.dart';
-import 'package:TrocWeb_BackOff/Tools/Etablissement.dart';
-import 'package:TrocWeb_BackOff/Tools/ParamNotif.dart';
-import 'package:TrocWeb_BackOff/Tools/Upload.dart';
 import 'package:TrocWeb_BackOff/stub_file_picking/platform_file_picker.dart';
 import 'package:TrocWeb_BackOff/stub_file_picking/web_file_picker.dart';
-import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:path/path.dart';
 
-import 'package:intl/intl.dart';
 import 'package:TrocWeb_BackOff/Tools/gColors.dart';
 import 'package:http/http.dart' as http;
 import 'package:toggle_switch/toggle_switch.dart';
+
+import 'package:image/image.dart' as img;
 
 class A_Dialog_PT_50_100 extends StatefulWidget {
   @override
@@ -69,11 +64,11 @@ class A_Dialog_PT_50_100State extends State<A_Dialog_PT_50_100> {
     int V = random.nextInt(10444) + 1;
 
     picList.clear();
-    for (int i = 1; i < 100; ++i) {
+    for (int i = 1; i < 20; ++i) {
       String wTmp =
           "${DbTools.SrvImg}Qualif_${DbTools.gInventaire.id}_$i.jpg" + "?v=$V";
 
-      //    print(">>>>>>>>>>>> wTmp ${wTmp}");
+          print(">>>>>>>>>>>> wTmp ${wTmp}");
 
       Uint8List pic = await DbTools.networkImageToByte(wTmp);
       if (pic.length > 1) {
@@ -348,14 +343,15 @@ class A_Dialog_PT_50_100State extends State<A_Dialog_PT_50_100> {
                     },
                     child: Icon(Icons.refresh),
                     style: ButtonStyle(
-                      shape: MaterialStateProperty.all(CircleBorder()),
-                      padding: MaterialStateProperty.all(EdgeInsets.all(20)),
-                      backgroundColor: MaterialStateProperty.all(
+                      shape: WidgetStateProperty.all(CircleBorder()),
+                      padding: WidgetStateProperty.all(EdgeInsets.all(20)),
+                      backgroundColor: WidgetStateProperty.all(
                           Colors.deepPurpleAccent), // <-- Button color
                       overlayColor:
-                          MaterialStateProperty.resolveWith<Color?>((states) {
-                        if (states.contains(MaterialState.pressed))
-                          return gColors.primary; // <-- Splash color
+                          WidgetStateProperty.resolveWith<Color?>((states) {
+                        if (states.contains(WidgetState.pressed))
+                          return gColors.primary;
+                        return null; // <-- Splash color
                       }),
                     ),
                   ),
@@ -365,14 +361,15 @@ class A_Dialog_PT_50_100State extends State<A_Dialog_PT_50_100> {
                     },
                     child: Icon(Icons.add),
                     style: ButtonStyle(
-                      shape: MaterialStateProperty.all(CircleBorder()),
-                      padding: MaterialStateProperty.all(EdgeInsets.all(20)),
-                      backgroundColor: MaterialStateProperty.all(
+                      shape: WidgetStateProperty.all(CircleBorder()),
+                      padding: WidgetStateProperty.all(EdgeInsets.all(20)),
+                      backgroundColor: WidgetStateProperty.all(
                           Colors.green), // <-- Button color
                       overlayColor:
-                          MaterialStateProperty.resolveWith<Color?>((states) {
-                        if (states.contains(MaterialState.pressed))
-                          return gColors.primary; // <-- Splash color
+                          WidgetStateProperty.resolveWith<Color?>((states) {
+                        if (states.contains(WidgetState.pressed))
+                          return gColors.primary;
+                        return null; // <-- Splash color
                       }),
                     ),
                   ),
@@ -390,16 +387,17 @@ class A_Dialog_PT_50_100State extends State<A_Dialog_PT_50_100> {
                           },
                           child: Icon(Icons.delete),
                           style: ButtonStyle(
-                            shape: MaterialStateProperty.all(CircleBorder()),
+                            shape: WidgetStateProperty.all(CircleBorder()),
                             padding:
-                                MaterialStateProperty.all(EdgeInsets.all(20)),
-                            backgroundColor: MaterialStateProperty.all(
+                                WidgetStateProperty.all(EdgeInsets.all(20)),
+                            backgroundColor: WidgetStateProperty.all(
                                 Colors.red), // <-- Button color
                             overlayColor:
-                                MaterialStateProperty.resolveWith<Color?>(
+                                WidgetStateProperty.resolveWith<Color?>(
                                     (states) {
-                              if (states.contains(MaterialState.pressed))
-                                return gColors.primary; // <-- Splash color
+                              if (states.contains(WidgetState.pressed))
+                                return gColors.primary;
+                              return null; // <-- Splash color
                             }),
                           ),
                         ),
@@ -474,6 +472,28 @@ class A_Dialog_PT_50_100State extends State<A_Dialog_PT_50_100> {
     print("UploadFilePicker <<");
   }
 
+  List<int> compressAndResizeImage(Uint8List streamncb) {
+    img.Image? image = img.decodeImage(streamncb);
+
+    // Resize the image to have the longer side be 800 pixels
+    int width;
+    int height;
+
+    if (image!.width > image.height) {
+      width = 800;
+      height = (image.height / image.width * 800).round();
+    } else {
+      height = 800;
+      width = (image.width / image.height * 800).round();
+    }
+
+    img.Image resizedImage = img.copyResize(image, width: width, height: height);
+    List<int> compressedBytes = img.encodeJpg(resizedImage, quality: 70);  // Adjust quality as needed
+
+
+    return compressedBytes;
+  }
+
   Future UploadFilePicker(String imagepath, int Consumer, int aIndex) async {
     print("UploadFilePicker");
 
@@ -490,7 +510,15 @@ class A_Dialog_PT_50_100State extends State<A_Dialog_PT_50_100> {
       print("imagepath $imagepath");
       FlutterWebFile file = files[0];
       print("file " + file.file.name);
-      var stream = file.fileBytes;
+
+      var streamnc = file.fileBytes;
+      Uint8List streamncb =  Uint8List.fromList(streamnc);
+      List<int> stream = compressAndResizeImage(streamncb);
+
+
+      print("UploadFilePicker streamnc ${streamnc.length}");
+      print("UploadFilePicker stream reduit ${stream.length}");
+
 
       String wPath = DbTools.SrvUrl;
       var uri = Uri.parse(wPath.toString());

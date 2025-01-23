@@ -59,11 +59,13 @@ class DbTools {
   static String Hexa_ville = "GRENOBLE";
 
   static var notif = Notif();
-  static String gVersion = "v2.42.0 b242";
+  static String gVersion = "v2.52.0 b252";
   static bool gTED = false;
   static bool gIsRememberLogin = true;
-  static String Url = "185.98.136.238";
-  //static String Url = "palmisphere.com";
+//  static String Url = "185.98.136.238";
+  static String Url = "trocweberp.fr";
+
+  static String curUrl = "";
 
   static int gLastID = 0;
   static int gLastIDObj = 0;
@@ -123,11 +125,10 @@ class DbTools {
 
   static List<Inventaire> lInventaire = [];
 
-  static String SrvUrl = "http://$Url/API_TWERP4.php";
-  static String SrvUrlt = "http://$Url/API_TWERPT.php";
-
-
-  static String SrvImg = "http://$Url/Img/";
+  static String SrvUrl = "https://$Url/API_TWERP4.php";
+  static String SrvUrlt = "https://$Url/API_TWERPT.php";
+  static String SrvImg = "https://$Url/Img/";
+  static String SrvAppli = "https://$Url/appli/";
   static String SrvTokenKey = "Ad2844Ze";
   static String SrvToken = "";
 
@@ -453,22 +454,14 @@ class DbTools {
 
     print(">>>>>>>> getEtablissementsAll() ${ListEtablissementAll.length}");
 
-    if (ListEtablissementAll == null) {
-      return false;
-    } else {
-      return true;
+    return true;
     }
-  }
 
   static Future<bool> getEtablissements() async {
     ListEtablissement = await getEtablissement_API_Post(
         "select", "select * from Etablissements");
-    if (ListEtablissement == null) {
-      return false;
-    } else {
-      return true;
+    return true;
     }
-  }
 
   static Future<bool> getEtablissement(String keyid) async {
     ListEtablissement = await getEtablissement_API_Post(
@@ -500,8 +493,6 @@ class DbTools {
     String eSQL = base64.encode(utf8.encode(aSQL)); // dXNlcm5hbWU6cGFzc3dvcmQ=
 
     final bodys = {'tic12z': SrvToken, 'zasq': aType, 'resza12': eSQL};
-
-
     var request = http.MultipartRequest('POST', Uri.parse(SrvUrl.toString()));
     request.fields.addAll(bodys);
 
@@ -669,6 +660,8 @@ class DbTools {
     return ret;
   }
 
+
+
   //****************************************************
   //************************  ParamNotif  ***********
   //****************************************************
@@ -755,22 +748,14 @@ class DbTools {
   static Future<bool> getUtilisateurs() async {
     ListUtilisateur =
         await getUtilisateur_API_Post("select", "select * from Utilisateurs");
-    if (ListUtilisateur == null) {
-      return false;
-    } else {
-      return true;
+    return true;
     }
-  }
 
   static Future<bool> getUtilisateursEtab(String aKeyId) async {
     ListUtilisateur = await getUtilisateur_API_Post("select",
         "select * from Utilisateurs WHERE etabid = ${gEtablissement.id}");
-    if (ListUtilisateur == null) {
-      return false;
-    } else {
-      return true;
+    return true;
     }
-  }
 
   static Future<bool> getUtilisateur(
       String aUtilisateur, String aMotdepasse) async {
@@ -781,15 +766,11 @@ class DbTools {
         "'";
 
     ListUtilisateur = await getUtilisateur_API_Post("select", aSQL);
-    if (ListUtilisateur == null) {
-      return false;
-    } else {
-      gUtilisateur = ListUtilisateur[0];
-      gUtilisateurLogin = gUtilisateur;
-      await getEtablissementid(gUtilisateur.etabid);
-      return true;
+    gUtilisateur = ListUtilisateur[0];
+    gUtilisateurLogin = gUtilisateur;
+    await getEtablissementid(gUtilisateur.etabid);
+    return true;
     }
-  }
 
   static Future<List<Utilisateur>> getUtilisateur_API_Post(
       String aType, String aSQL) async {
@@ -802,7 +783,7 @@ class DbTools {
     request.fields.addAll(bodys);
 
     http.StreamedResponse response;
-    print("request.send");
+    print("request.send ${SrvUrl.toString()}");
     response = await request.send();
     print("response $response");
 
@@ -877,22 +858,14 @@ class DbTools {
 
   static Future<bool> getCde_Ents() async {
     ListCde_Ent = await getCde_Ent_API_Post("select", "select * from Cde_Ent");
-    if (ListCde_Ent == null) {
-      return false;
-    } else {
-      return true;
+    return true;
     }
-  }
 
   static Future<bool> getCde_Ent() async {
     ListCde_Ent = await getCde_Ent_API_Post("select",
         "select * from Cde_Ent WHERE Cde_Ent_Invid = ${gInventaire.id}");
-    if (ListCde_Ent == null) {
-      return false;
-    } else {
-      return true;
+    return true;
     }
-  }
 
   static Future<List<Cde_Ent>> getCde_Ent_API_Post(
       String aType, String aSQL) async {
@@ -961,6 +934,8 @@ class DbTools {
         gCde_Ent.Cde_Ent_Rep_Net.toStringAsFixed(2).toString() +
         ", Cde_Ent_Rem_Net = " +
         gCde_Ent.Cde_Ent_Rem_Net.toStringAsFixed(2).toString() +
+        ", Cde_Ent_Acompte = " +
+        gCde_Ent.Cde_Ent_Acompte.toStringAsFixed(2).toString() +
         ", Cde_Ent_Px_1  = " +
         gCde_Ent.Cde_Ent_Px_1.toStringAsFixed(2).toString() +
         ", Cde_Ent_Qte_1 = " +
@@ -1038,7 +1013,7 @@ class DbTools {
     int wCde_Ent_EDT = wCde_Ent.Cde_Ent_EDT ? 1 : 0;
 
     String aSQL =
-        "INSERT INTO Cde_Ent ( Cde_Ent_Invid, Cde_Ent_DF, Cde_Ent_EDT,  Cde_Ent_Remarque, Cde_Ent_Tx_Tks, Cde_Ent_Tot_HT,Cde_Ent_Tot_TVA ,Cde_Ent_Tot_TTC, Cde_Ent_Tot_CLIENT, Cde_Ent_Fact,Cde_Ent_Annul,Cde_Ent_Rep_Net,Cde_Ent_Rem_Net"
+        "INSERT INTO Cde_Ent ( Cde_Ent_Invid, Cde_Ent_DF, Cde_Ent_EDT,  Cde_Ent_Remarque, Cde_Ent_Tx_Tks, Cde_Ent_Tot_HT,Cde_Ent_Tot_TVA ,Cde_Ent_Tot_TTC, Cde_Ent_Tot_CLIENT, Cde_Ent_Fact,Cde_Ent_Annul,Cde_Ent_Rep_Net,Cde_Ent_Rem_Net,Cde_Ent_Acompte"
                 ", Cde_Ent_Px_1, Cde_Ent_Qte_1, Cde_Ent_Mt_1, Cde_Ent_Net_1"
                 ", Cde_Ent_Px_2, Cde_Ent_Qte_2, Cde_Ent_Mt_2, Cde_Ent_Net_2"
                 ", Cde_Ent_Px_3, Cde_Ent_Qte_3, Cde_Ent_Mt_3, Cde_Ent_Net_3"
@@ -1085,6 +1060,9 @@ class DbTools {
             ", "
                 "" +
             wCde_Ent.Cde_Ent_Rem_Net.toStringAsFixed(2).toString() +
+            ", "
+                "" +
+            wCde_Ent.Cde_Ent_Acompte.toStringAsFixed(2).toString() +
             ", "
                 "" +
             wCde_Ent.Cde_Ent_Px_1.toStringAsFixed(2).toString() +
@@ -1250,12 +1228,10 @@ class DbTools {
     await DbTools.getInventaireDets();
 
     double mtM3 = 0;
-    if (ListInventaireDet != null) {
-      ListInventaireDet.forEach((element) {
-        if (element.CDE == "D") mtM3 += element.M3;
-      });
-    }
-    Mt_Dem_HT_Inv = mtM3 * wEtablissement.MtDechM3;
+    ListInventaireDet.forEach((element) {
+      if (element.CDE == "D") mtM3 += element.M3;
+    });
+      Mt_Dem_HT_Inv = mtM3 * wEtablissement.MtDechM3;
 
     print(
         "≈~~~~~~~~~~~~~~~~~~~~~~~~ CALCUL MONTANTS INV $mtM3 * ${gEtablissement.MtDechM3} $Mt_Dem_HT_Inv");
@@ -1294,23 +1270,19 @@ class DbTools {
   static CalculMtDecheterie() async {
     double mtM3 = 0;
 
-    if (ListInventaireDet != null) {
-      ListInventaireDet.forEach((element) {
-        if (element.CDE == "D") mtM3 += element.M3;
-      });
-    }
-
+    ListInventaireDet.forEach((element) {
+      if (element.CDE == "D") mtM3 += element.M3;
+    });
+  
     double mtDech = mtM3 * gEtablissement.MtDechM3;
 
     gInventaire.Mt_Dem_HT = mtDech;
 
     double Mt_TKS_HT = 0;
-    if (ListCde_Ent != null) {
-      ListCde_Ent.forEach((element) {
-        Mt_TKS_HT += element.Cde_Ent_Tot_HT;
-      });
-    }
-
+    ListCde_Ent.forEach((element) {
+      Mt_TKS_HT += element.Cde_Ent_Tot_HT;
+    });
+  
     gInventaire.Mt_TKS_HT = Mt_TKS_HT;
 
     CalculTaux();
@@ -1361,12 +1333,8 @@ class DbTools {
 
     ListInventaire = await getInventaire_API_Post("select", aSQL);
     print("getInventaires <");
-    if (ListInventaire == null) {
-      return false;
-    } else {
-      return true;
+    return true;
     }
-  }
 
   static Future<bool> getInventairesNewCT_Encours() async {
     String aSQL = "select * FROM Inventaires WHERE etabid = ${gEtablissement.id} and AffAccept = 0 AND etabid !=  etabidOrigine AND Status != 8 order by Nom";
@@ -1374,12 +1342,8 @@ class DbTools {
 
     ListInventaire = await getInventaire_API_Post("select", aSQL);
     print("getInventaires <");
-    if (ListInventaire == null) {
-      return false;
-    } else {
-      return true;
+    return true;
     }
-  }
 
 
 
@@ -1390,12 +1354,8 @@ class DbTools {
 
     ListInventaire = await getInventaire_API_Post("select", aSQL);
     print("getInventaires <");
-    if (ListInventaire == null) {
-      return false;
-    } else {
-      return true;
+    return true;
     }
-  }
 
 
   static Future<bool> getInventaire(int ID) async {
@@ -1405,13 +1365,9 @@ class DbTools {
 
     wListInventaire = await getInventaire_API_Post("select", aSQL);
     print("wListInventaire <");
-    if (wListInventaire != null) {
-      DbTools.gInventaire = wListInventaire[0];
-      return true;
-    } else {
-      return false;
+    DbTools.gInventaire = wListInventaire[0];
+    return true;
     }
-  }
 
 
 
@@ -1423,12 +1379,8 @@ class DbTools {
 
     ListInventaireCalendar = await getInventaire_API_Post("select", aSQL);
     print("ListInventaireCalendar <");
-    if (ListInventaireCalendar == null) {
-      return false;
-    } else {
-      return true;
+    return true;
     }
-  }
 
   static Future<bool> getInventairesEtabID(int EtabID) async {
     String aSQL =
@@ -1439,12 +1391,8 @@ class DbTools {
     print("getInventairesEtabID ListInventaire ${ListInventaire.length}");
 
 
-    if (ListInventaire == null) {
-      return false;
-    } else {
-      return true;
+    return true;
     }
-  }
 
   static Future<bool> getInventairesEtabID50100(int EtabID) async {
     String aSQL =
@@ -1455,12 +1403,8 @@ class DbTools {
     print("getInventairesEtabID ListInventaire ${ListInventaire.length}");
 
 
-    if (ListInventaire == null) {
-      return false;
-    } else {
-      return true;
+    return true;
     }
-  }
 
 
   static Future<bool> getInventairesEtabID_NewCT(int EtabID) async {
@@ -1471,12 +1415,8 @@ class DbTools {
 
 
     ListInventaire = await getInventaire_API_Post("select", aSQL);
-    if (ListInventaire == null) {
-      return false;
-    } else {
-      return true;
+    return true;
     }
-  }
 
   static Future<bool> getInventairesEtabID_AllCT(int EtabID) async {
     String aSQL =
@@ -1486,35 +1426,23 @@ class DbTools {
 
 
     ListInventaire = await getInventaire_API_Post("select", aSQL);
-    if (ListInventaire == null) {
-      return false;
-    } else {
-      return true;
+    return true;
     }
-  }
 
 
   static Future<bool> getInventairesAll(String aName) async {
     String aSQL =
         "select * FROM Inventaires WHERE UPPER(Nom) LIKE UPPER('%${aName}%') OR UPPER(Adresse1) LIKE UPPER('%${aName}%')  OR UPPER(Ville) LIKE UPPER('%${aName}%') order by Nom";
     ListInventaire = await getInventaire_API_Post("select", aSQL);
-    if (ListInventaire == null) {
-      return false;
-    } else {
-      return true;
+    return true;
     }
-  }
 
   static Future<bool> getInventairesActif() async {
     String aSQL =
         "select * FROM Inventaires WHERE `Status` !=8 ";
     ListInventaire = await getInventaire_API_Post("select", aSQL);
-    if (ListInventaire == null) {
-      return false;
-    } else {
-      return true;
+    return true;
     }
-  }
 
 
 
@@ -1795,12 +1723,8 @@ WHERE a.Actionid = 120 and a.OK = 1;
     print("getInventaireDetsPieces() " + aSQL);
 
     ListInventaireDetPieces = await getInventaireDet_API_Post("select", aSQL);
-    if (ListInventaireDetPieces == null) {
-      return false;
-    } else {
-      return true;
+    return true;
     }
-  }
 
   static Future<bool> getInventaireDets() async {
     String aSQL =
@@ -1809,12 +1733,8 @@ WHERE a.Actionid = 120 and a.OK = 1;
     print("getInventaireDets " + aSQL);
 
     ListInventaireDet = await getInventaireDet_API_Post("select", aSQL);
-    if (ListInventaireDet == null) {
-      return false;
-    } else {
-      return true;
+    return true;
     }
-  }
 
   static Future<bool> getInventaireDets_Tot() async {
     String aSQL =
@@ -1827,19 +1747,15 @@ WHERE a.Actionid = 120 and a.OK = 1;
 
     List<InventaireDet> wListInventaireDet = [];
     wListInventaireDet = await getInventaireDet_API_Post("select", aSQL);
-    if (wListInventaireDet == null) {
-      return false;
-    } else {
-      wListInventaireDet.forEach((element) async {
-        if (element.libelle != "--- Fin de Chantier ---") {
-          gInventaireDet_Px_Achat += element.Px_Achat;
-          if (element.CDE == "D") gInventaireDet_M3 += element.M3;
-        }
-      });
+    wListInventaireDet.forEach((element) async {
+      if (element.libelle != "--- Fin de Chantier ---") {
+        gInventaireDet_Px_Achat += element.Px_Achat;
+        if (element.CDE == "D") gInventaireDet_M3 += element.M3;
+      }
+    });
 
-      return true;
+    return true;
     }
-  }
 
   static Future<List<InventaireDet>> getInventaireDet_API_Post(
       String aType, String aSQL) async {
@@ -2006,12 +1922,8 @@ WHERE a.Actionid = 120 and a.OK = 1;
   static Future<bool> getActions() async {
     String aSQL = "select * FROM Actions order by Actionid";
     ListAction = await getAction_API_Post("select", aSQL);
-    if (ListAction == null) {
-      return false;
-    } else {
-      return true;
+    return true;
     }
-  }
 
   static Future<List<pActions>> getAction_API_Post(
       String aType, String aSQL) async {
@@ -2065,12 +1977,8 @@ WHERE a.Actionid = 120 and a.OK = 1;
     print("genInventaireActions " + aSQL);
 
     ListInventaireAction = await getInventaireAction_API_Post("select", aSQL);
-    if (ListInventaireAction == null) {
-      return false;
-    } else {
-      return true;
+    return true;
     }
-  }
 
   static Future<bool> updateInventaireAction() async {
     String aSQL =
@@ -2116,12 +2024,8 @@ WHERE a.Actionid = 120 and a.OK = 1;
           "select * FROM InventaireAction, Actions WHERE InventaireAction.Actionid = Actions.Actionid AND Actions.Agence = 1 AND invid = ${gInventaire.id}  order by id";
 
     ListInventaireAction = await getInventaireAction_API_Post("select", aSQL);
-    if (ListInventaireAction == null) {
-      return false;
-    } else {
-      return true;
+    return true;
     }
-  }
 
   static Future<List<InventaireAction>> getInventaireAction_API_Post(
       String aType, String aSQL) async {
@@ -2250,24 +2154,16 @@ WHERE a.Actionid = 120 and a.OK = 1;
         "select * FROM InventairesDetPhoto WHERE invdetid = ${gInventaireDet.id}  order by id";
     ListInventaireDetPhoto =
         await getInventaireDetPhoto_API_Post("select", aSQL);
-    if (ListInventaireDetPhoto == null) {
-      return false;
-    } else {
-      return true;
+    return true;
     }
-  }
 
   static Future<bool> getInventaireDetPhotosAll() async {
     String aSQL =
         "SELECT InventairesDetPhoto.* FROM InventairesDet,InventairesDetPhoto WHERE invid = ${gInventaire.id} AND InventairesDet.id = InventairesDetPhoto.invdetid group by InventairesDetPhoto.invdetid,InventairesDetPhoto.photo";
     ListInventaireDetPhotoAll =
         await getInventaireDetPhoto_API_Post("select", aSQL);
-    if (ListInventaireDetPhotoAll == null) {
-      return false;
-    } else {
-      return true;
+    return true;
     }
-  }
 
   static Future<bool> addInventaireDetPhotos(int aIndex) async {
     String wValue = "${gInventaireDet.id}, ${aIndex} ";
@@ -2528,15 +2424,18 @@ WHERE a.Actionid = 120 and a.OK = 1;
 
   //****************************************
   //****************************************
+
   //****************************************
 
-  static Future<bool> SrvSendPushNotifications(
-      String aTitle, String aBody, String aDate) async {
+
+
+  static Future<bool> SrvSendPushNotifications(String aTitle, String aBody, String aDate) async {
     aTitle = ReplaceWord(aTitle, aDate, "");
     aBody = ReplaceWord(aBody, aDate, "");
 
     Etablissement wEtablissement = DbTools.getEtablissementsbyID(DbTools.gInventaire.etabid);
     print("SrvSendPushNotifications ${wEtablissement.AppToken_1}");
+    print("SrvSendPushNotifications ${SrvUrl}");
     setSrvToken();
     var request = http.MultipartRequest('POST', Uri.parse(SrvUrl.toString()));
 
@@ -2545,7 +2444,7 @@ WHERE a.Actionid = 120 and a.OK = 1;
 
     request.fields.addAll({
       'tic12z': SrvToken,
-      'zasq': 'push',
+      'zasq': 'push3',
       'token1': "${wEtablissement.AppToken_1}",
       'token2': "${wEtablissement.AppToken_2}",
       'token3': "${wEtablissement.AppToken_3}",
@@ -2556,6 +2455,7 @@ WHERE a.Actionid = 120 and a.OK = 1;
       "body": "${aBody}",
       "invid": "${DbTools.gInventaire.id}",
     });
+
 
     print("SrvSendPushNotifications ${request.fields}");
 
@@ -2779,7 +2679,7 @@ WHERE a.Actionid = 120 and a.OK = 1;
     tVille.clear();
     tCp.clear();
 
-    String wParam = "http://api-adresse.data.gouv.fr/search/?q=" +
+    String wParam = "https://api-adresse.data.gouv.fr/search/?q=" +
         aCp +
         "&type=municipality&limit=30";
 

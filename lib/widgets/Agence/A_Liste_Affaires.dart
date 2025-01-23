@@ -651,11 +651,6 @@ class InventaireDataSource extends DataGridSource {
   int? aLength = value1.length;
   int? bLength = value2.length;
 
-  if (aLength == null || bLength == null) {
-  print("null");
-  return 0;
-  }
-
   if (value1.compareTo(value2) > 0) {
   wret = 1;
   } else if (value1.compareTo(value2) < 0) {

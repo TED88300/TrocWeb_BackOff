@@ -170,18 +170,6 @@ class Etablissement {
 
     );
 
-    if (wEtablissement.keyid == null) wEtablissement.keyid = "";
-    if (wEtablissement.Libelle == null) wEtablissement.Libelle = "";
-    if (wEtablissement.adresse1 == null) wEtablissement.adresse1 = "";
-    if (wEtablissement.adresse2 == null) wEtablissement.adresse2 = "";
-
-    if (wEtablissement.cp == null) wEtablissement.cp = "";
-    if (wEtablissement.ville == null) wEtablissement.ville = "";
-    if (wEtablissement.tel == null) wEtablissement.tel = "";
-    if (wEtablissement.mail == null) wEtablissement.mail = "";
-
-    if (wEtablissement.Url_Avis == null) wEtablissement.Url_Avis = "";
-
 
     return wEtablissement;
   }

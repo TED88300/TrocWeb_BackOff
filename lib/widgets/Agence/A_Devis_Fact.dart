@@ -33,6 +33,9 @@ class Devis_FactState extends State<Devis_Fact> {
   double tot_TVA = 0.0;
   double tot_TTC = 0.0;
 
+  TextEditingController tecAcompte = TextEditingController();
+  double Mt_Acompte = 0;
+
   double Mt_Dem_HT = 0;
   double Mt_Dem_TTC = 0;
   double Mt_TX = 0;
@@ -47,8 +50,6 @@ class Devis_FactState extends State<Devis_Fact> {
   bool Cde_EDT = false;
 
   Future AddDevis() async {
-
-
     print("≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈   AddDevis");
 
     DbTools.gCde_Ent = Cde_Ent(
@@ -65,6 +66,7 @@ class Devis_FactState extends State<Devis_Fact> {
         0.0,
         false,
         false,
+        0.0,
         0.0,
         0.0,
         0.0,
@@ -108,7 +110,6 @@ class Devis_FactState extends State<Devis_Fact> {
   }
 
   Future AlimCDE() async {
-
     print("≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈   AlimCDE");
 
     if (Cde_DF == "D")
@@ -132,7 +133,6 @@ class Devis_FactState extends State<Devis_Fact> {
     tecMt[0].text = dMt[0].toStringAsFixed(2);
     tecQte[0].text = "1.0";
 
-
     dMt[6] = DbTools.gCde_Ent.Cde_Ent_Rem_Net;
     if (dMt[6] == 0) dMt[6] = DbTools.gCde_Ent.Cde_Ent_Rem_Net;
     if (DbTools.gCde_Ent.Cde_Ent_Rem_Lib.isEmpty) {
@@ -142,6 +142,8 @@ class Devis_FactState extends State<Devis_Fact> {
     tecMt[6].text = dMt[6].toStringAsFixed(2);
     tecQte[6].text = "1.0";
 
+    tecAcompte.text = DbTools.gCde_Ent.Cde_Ent_Acompte.toStringAsFixed(2);
+    ;
 
     if (DbTools.gCde_Ent.Cde_Ent_Lib_1.isEmpty) {
       DbTools.gCde_Ent.Cde_Ent_Lib_1 = "Décheterie";
@@ -178,7 +180,7 @@ class Devis_FactState extends State<Devis_Fact> {
   }
 
   Future initLib() async {
-    print ("initLib A");
+    print("initLib A");
     await DbTools.getCde_Ent();
     await DbTools.getInventaireDets_Tot();
 
@@ -187,7 +189,7 @@ class Devis_FactState extends State<Devis_Fact> {
       await DbTools.getCde_Ent();
     }
 
-    print ("initLib B");
+    print("initLib B");
 
     if (DbTools.ListCde_Ent.length > 0) {
       if (DbTools.ListCde_Ent.length == 1)
@@ -199,14 +201,12 @@ class Devis_FactState extends State<Devis_Fact> {
       Calcul();
     }
 
-    print ("initLib C");
-
-
+    print("initLib C");
   }
 
   @override
   void initState() {
-    print ("initState A");
+    print("initState A");
     DbTools.gCde_Ent = Cde_Ent(
         0,
         0,
@@ -243,6 +243,7 @@ class Devis_FactState extends State<Devis_Fact> {
         0.0,
         0.0,
         0.0,
+        0.0,
         "",
         "",
         "",
@@ -254,10 +255,9 @@ class Devis_FactState extends State<Devis_Fact> {
         0);
     initLib();
 
-    print ("initState B");
+    print("initState B");
     tecRemarque.text = "";
-    print ("initState C");
-
+    print("initState C");
 
     for (int j = 0; j < nbLig; j++) {
       tecLib[j].text = "";
@@ -266,20 +266,16 @@ class Devis_FactState extends State<Devis_Fact> {
       dMt[j] = 0.0;
     }
 
-    print ("initState D");
-
+    print("initState D");
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-
     if (DbTools.gCde_Ent.Cde_Entid == 0) return Container();
 
-
     return buildDevisFact(context);
-
   }
 
   Widget buildDevisFact(BuildContext context) {
@@ -501,6 +497,33 @@ class Devis_FactState extends State<Devis_Fact> {
                             border: TableBorder.all(),
                             children: [
                               TableRow(children: [
+                                Padding(
+                                    padding: EdgeInsets.only(
+                                        left: .0,
+                                        right: .0,
+                                        top: 12,
+                                        bottom: .0),
+                                    child: DrawTableCell("Acompte",
+                                        aTextAlign: TextAlign.left)),
+                                DrawTableCellEdt(tecAcompte),
+                              ]),
+                            ]))),
+                Container(
+                  height: 10,
+                ),
+                Container(
+                    color: Colors.black,
+                    padding: EdgeInsets.all(2),
+                    child: Container(
+                        color: Colors.white,
+                        child: Table(
+                            columnWidths: {
+                              0: FlexColumnWidth(2),
+                              1: FlexColumnWidth(1),
+                            },
+                            border: TableBorder.all(),
+                            children: [
+                              TableRow(children: [
                                 DrawTableCell("Total Client   ",
                                     aTextAlign: TextAlign.left),
                                 DrawTableCell(
@@ -643,8 +666,9 @@ class Devis_FactState extends State<Devis_Fact> {
             },
             style: ElevatedButton.styleFrom(
               backgroundColor:
-              isUpdate ? gColors.primary : gColors.LinearGradient1,
-              padding: const EdgeInsets.all(12.0),),
+                  isUpdate ? gColors.primary : gColors.LinearGradient1,
+              padding: const EdgeInsets.all(12.0),
+            ),
             child: Text('Save',
                 style: TextStyle(
                     fontSize: 16,
@@ -662,11 +686,10 @@ class Devis_FactState extends State<Devis_Fact> {
 
                     setState(() {});
                   },
-            style: ElevatedButton.styleFrom(
-              backgroundColor:gColors.tks,
-              padding: const EdgeInsets.all(12.0),),
-
-
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: gColors.tks,
+                    padding: const EdgeInsets.all(12.0),
+                  ),
                   child: Text('Création de la Facture',
                       style: TextStyle(
                           fontSize: 16,
@@ -720,16 +743,16 @@ class Devis_FactState extends State<Devis_Fact> {
                     return alert;
                   },
                 );
-              } else
-                {
-                  await Devis_FactImp.GenDevis();
-                }
+              } else {
+                await Devis_FactImp.GenDevis();
+              }
 
               setState(() {});
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.deepPurpleAccent,
-              padding: const EdgeInsets.all(12.0),),
+              padding: const EdgeInsets.all(12.0),
+            ),
             child: Text(Cde_EDT ? 'Réimpression' : 'Impression',
                 style: TextStyle(
                     fontSize: 16,
@@ -889,10 +912,9 @@ class Devis_FactState extends State<Devis_Fact> {
     double QteRem = double.parse(tecQte[6].text);
     dMt[6] = DbTools.dp(MtRem * QteRem, 2);
 
-
     double wTx_tks = 1;
     if (DbTools.isEtablissementsComm()) {
-      for (int j = 1; j < nbLig-1; j++) {
+      for (int j = 1; j < nbLig - 1; j++) {
         double MtLig = 0;
         double QteLig = 0;
 
@@ -913,24 +935,19 @@ class Devis_FactState extends State<Devis_Fact> {
         Mt_Dem_HT += dMtBrut[j];
       }
 
-      if ( DbTools.gInventaire.TxForce != 0)
-        {
-        if ( DbTools.gInventaire.TxForce == 999)
-            Mt_TX = 0;
-          else
-            Mt_TX = DbTools.gInventaire.TxForce;
-        }
-      else if (Mt_Dem_HT < 1000)
+      if (DbTools.gInventaire.TxForce != 0) {
+        if (DbTools.gInventaire.TxForce == 999)
+          Mt_TX = 0;
+        else
+          Mt_TX = DbTools.gInventaire.TxForce;
+      } else if (Mt_Dem_HT < 1000)
         Mt_TX = 30;
       else if (Mt_Dem_HT < 2000)
         Mt_TX = 25;
       else
         Mt_TX = 20;
 
-
-      if (DbTools.gInventaire.Origine == "HEXA")
-        Mt_TX = 5;
-
+      if (DbTools.gInventaire.Origine == "HEXA") Mt_TX = 5;
 
       double txTVA = DbTools.gEtablissement.TxTVA;
       Mt_Dem_TTC = Mt_Dem_HT * (1 + txTVA / 100);
@@ -950,7 +967,7 @@ class Devis_FactState extends State<Devis_Fact> {
     tot_TVA = 0.0;
     tot_TTC = 0.0;
 
-    for (int j = 1; j < nbLig-1; j++) {
+    for (int j = 1; j < nbLig - 1; j++) {
       double MtLig = 0;
       double QteLig = 0;
 
@@ -972,7 +989,9 @@ class Devis_FactState extends State<Devis_Fact> {
     tot_TVA = DbTools.dp(tot_HT * txTVA / 100, 2);
     tot_TTC = tot_HT + tot_TVA;
 
-    tot_Client = tot_TTC - dMt[0]- dMt[6];
+    double acompte = double.parse(tecAcompte.text);
+
+    tot_Client = tot_TTC - dMt[0] - dMt[6] - acompte;
     isUpdateEcr();
   }
 
@@ -981,10 +1000,8 @@ class Devis_FactState extends State<Devis_Fact> {
 
     isUpdate = dMt[0] != DbTools.gCde_Ent.Cde_Ent_Rep_Net ||
         tecLib[0].text != DbTools.gCde_Ent.Cde_Ent_Rep_Lib ||
-
         dMt[6] != DbTools.gCde_Ent.Cde_Ent_Rem_Net ||
         tecLib[6].text != DbTools.gCde_Ent.Cde_Ent_Rem_Lib ||
-
         dPx[1] != DbTools.gCde_Ent.Cde_Ent_Px_1 ||
         dQte[1] != DbTools.gCde_Ent.Cde_Ent_Qte_1 ||
         tecLib[1].text != DbTools.gCde_Ent.Cde_Ent_Lib_1 ||
@@ -1011,7 +1028,7 @@ class Devis_FactState extends State<Devis_Fact> {
     DbTools.gCde_Ent.Cde_Ent_Rem_Net = dMt[6];
     DbTools.gCde_Ent.Cde_Ent_Rem_Lib = tecLib[6].text.replaceAll("'", "\'");
 
-
+    DbTools.gCde_Ent.Cde_Ent_Acompte = double.parse(tecAcompte.text);
 
     double MtLig = double.parse(tecMt[1].text);
     DbTools.gCde_Ent.Cde_Ent_Px_1 = MtLig;

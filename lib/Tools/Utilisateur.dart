@@ -26,9 +26,6 @@ class Utilisateur {
 
     );
 
-    if (wUtilisateur.User == null) wUtilisateur.User = "";
-    if (wUtilisateur.Motdepasse == null) wUtilisateur.Motdepasse = "";
-
 
 
     return wUtilisateur;

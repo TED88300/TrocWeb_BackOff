@@ -1,8 +1,8 @@
 import 'package:TrocWeb_BackOff/Tools/DbTools.dart';
 import 'package:TrocWeb_BackOff/Tools/Etablissement.dart';
 import 'package:TrocWeb_BackOff/Tools/ParamNotif.dart';
+import 'package:TrocWeb_BackOff/Tools/Push.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 import 'package:intl/intl.dart';
 
@@ -254,8 +254,10 @@ else
 
             if (tecTilte.text.length > 0)
               {
-                print("SrvSendPushNotifications");
-                await DbTools.SrvSendPushNotifications(tecTilte.text,tecBody.text, aDate);
+//                print("SrvSendPushNotifications");
+//                await DbTools.SrvSendPushNotifications(tecTilte.text,tecBody.text, aDate);
+              print("SendPushNotifications");
+              await Push.SendPushNotifications(tecTilte.text,tecBody.text, aDate);
               }
 
             if (tecSubject.text.length > 0)

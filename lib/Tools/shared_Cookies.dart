@@ -4,9 +4,6 @@ class CookieManager {
   static CookieManager _manager = CookieManager();
 
   static getInstance() {
-    if (_manager == null) {
-      _manager = CookieManager();
-    }
     return _manager;
   }
 

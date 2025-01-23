@@ -9,9 +9,7 @@ class VerticalSplitView extends StatefulWidget {
 
   const VerticalSplitView(
       { required this.left, required this.right, this.ratio = 0.5})
-      : assert(left != null),
-        assert(right != null),
-        assert(ratio >= 0),
+      : assert(ratio >= 0),
         assert(ratio <= 1);
 
   @override
@@ -40,7 +38,6 @@ class _VerticalSplitViewState extends State<VerticalSplitView> {
     return LayoutBuilder(builder: (context, BoxConstraints constraints) {
       assert(_ratio <= 1);
       assert(_ratio >= 0);
-      if (_maxWidth == null) _maxWidth = constraints.maxWidth - _dividerWidth;
       if (_maxWidth != constraints.maxWidth) {
         _maxWidth = constraints.maxWidth - _dividerWidth;
       }

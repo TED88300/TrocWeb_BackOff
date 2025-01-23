@@ -6,7 +6,6 @@
    String piece = "";
    String libelle = "";
    String CDE = "";
-
    double Px_Vente = 0.0;
    double Px_Achat = 0.0;
    double Temps = 0.0;
@@ -78,6 +77,39 @@
      this.Autre = this.Autre.replaceAll("'", "\'");
    }
 
+   String Desc() {
+     return 'InventaireDet{'
+         'id: $id, '
+         'invid: $invid, '
+         'piece: $piece, '
+         'libelle: $libelle, '
+         'CDE: $CDE, '
+         'Px_Vente: $Px_Vente, '
+         'Px_Achat: $Px_Achat, '
+         'Temps: $Temps, '
+         'M3: $M3, '
+         'Tri: $Tri, '
+         'Demontage: $Demontage, '
+         'Manip_Delicate: $Manip_Delicate, '
+         'Autre: $Autre, '
+         '}';
+   }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
+   
+   
  }

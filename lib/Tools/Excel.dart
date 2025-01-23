@@ -1,10 +1,8 @@
-import 'dart:math';
 
 import 'package:TrocWeb_BackOff/Tools/DbTools.dart';
 import 'package:TrocWeb_BackOff/Tools/save_file_web.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart';
-import 'package:flutter/material.dart';
 
 class Excel {
   static Future<void> CrtExcelPat(String filepath, int wMonth, int wYear, int EtabId, int AffAll) async {

@@ -1,9 +1,6 @@
 
-import 'dart:async';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -101,6 +98,7 @@ class chartDate extends StatelessWidget {
     return Scaffold(
         body: Center(
             child: Container(
+/*
                 child: SfCartesianChart(
                     primaryXAxis: DateTimeAxis(
 //                      interval: 1,
@@ -120,11 +118,8 @@ class chartDate extends StatelessWidget {
                           yValueMapper: (ChartData data, _) => data.y,
                           xAxisName : "Date",
                         yAxisName : "Val",
+                        ),
 
-
-
-
-        ),
                       SplineSeries<ChartData, DateTime>(
                           dataSource: chartData2,
                           xValueMapper: (ChartData data, _) => data.x,
@@ -134,6 +129,7 @@ class chartDate extends StatelessWidget {
                       )
                     ]
                 )
+*/
             )
         )
     );

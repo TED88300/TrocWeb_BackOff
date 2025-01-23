@@ -20,6 +20,7 @@ class Cde_Ent {
 
   double Cde_Ent_Rep_Net = 0;
   double Cde_Ent_Rem_Net = 0;
+  double Cde_Ent_Acompte = 0;
   double Cde_Ent_Px_1 = 0;
   double Cde_Ent_Qte_1 = 0;
   double Cde_Ent_Mt_1 = 0;
@@ -69,6 +70,7 @@ class Cde_Ent {
     bool Cde_Ent_Annul,
     Cde_Ent_Rep_Net,
       Cde_Ent_Rem_Net,
+      Cde_Ent_Acompte,
     Cde_Ent_Px_1,
     Cde_Ent_Qte_1,
     Cde_Ent_Mt_1,
@@ -115,10 +117,9 @@ class Cde_Ent {
     this.Cde_Ent_Tot_CLIENT = Cde_Ent_Tot_CLIENT;
     this.Cde_Ent_Fact = Cde_Ent_Fact;
     this.Cde_Ent_Annul = Cde_Ent_Annul;
-
     this.Cde_Ent_Rep_Net = Cde_Ent_Rep_Net;
     this.Cde_Ent_Rem_Net = Cde_Ent_Rem_Net;
-
+    this.Cde_Ent_Acompte = Cde_Ent_Acompte;
     this.Cde_Ent_Px_1 = Cde_Ent_Px_1;
     this.Cde_Ent_Qte_1 = Cde_Ent_Qte_1;
     this.Cde_Ent_Mt_1 = Cde_Ent_Mt_1;
@@ -184,6 +185,7 @@ class Cde_Ent {
       bCde_Ent_Annul,
       double.parse(json['Cde_Ent_Rep_Net']),
       double.parse(json['Cde_Ent_Rem_Net']),
+      double.parse(json['Cde_Ent_Acompte']),
       double.parse(json['Cde_Ent_Px_1']),
       double.parse(json['Cde_Ent_Qte_1']),
       double.parse(json['Cde_Ent_Mt_1']),
